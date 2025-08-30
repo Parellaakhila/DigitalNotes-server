@@ -1,18 +1,28 @@
 const express = require('express');
-const connectDB = require('./config/db');
 const cors = require('cors');
+const mongoose = require('mongoose');
 require('dotenv').config();
 
 const authRoutes = require('./routes/authRoutes');   
 const noteRoutes = require('./routes/NotesRoutes');
 
-
 const app = express();
-connectDB(); 
 
+// ✅ Connect to MongoDB (single connection)
+mongoose.connect(process.env.MONGO_URI, {
+  useNewUrlParser: true,
+  useUnifiedTopology: true
+})
+.then(() => console.log("✅ MongoDB connected"))
+.catch(err => {
+  console.error("❌ MongoDB connection failed:", err.message);
+  process.exit(1);
+});
+
+// ✅ CORS setup
 const allowedOrigins = [
-  'https://digital-notes-application.vercel.app',
-  'http://localhost:5173',
+  'https://digital-notes-client-id5k.vercel.app', // correct frontend
+  'http://localhost:5173',  // for local dev
   'http://localhost:5000'
 ];
 
@@ -22,14 +32,13 @@ app.use(cors({
 }));
 app.use(express.json());
 
-// Routes
+// ✅ Routes
 app.get('/', (req, res) => {
   res.send('✅ NoteIt backend is running!');
 });
 app.use('/api/auth', authRoutes);  
 app.use('/api/notes', noteRoutes);
 
-
-
+// ✅ Start server
 const PORT = process.env.PORT || 5000;
-app.listen(PORT, () => console.log(`Server running on http://localhost:${PORT}`));
+app.listen(PORT, () => console.log(`🚀 Server running on http://localhost:${PORT}`));
