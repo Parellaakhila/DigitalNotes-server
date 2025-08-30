@@ -21,10 +21,12 @@ mongoose.connect(process.env.MONGO_URI, {
 
 // ✅ CORS setup
 const allowedOrigins = [
-  'https://digital-notes-client-iw4t.vercel.app/', // correct frontend
-  'http://localhost:5173',  // for local dev
+  'https://digital-notes-application.vercel.app',
+  'https://digital-notes-application-y9q1.vercel.app',
+  'http://localhost:5173',
   'http://localhost:5000'
 ];
+
 
 app.use(cors({
   origin: allowedOrigins,
